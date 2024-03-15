@@ -257,3 +257,16 @@ systemctl enable wazuh-dashboard
 systemctl start wazuh-dashboard
 ```
 Login with FQDN ```https://wazuh.domain.com```
+
+You will noticed there on a Global tenent to adjust this add the following lines to wazuh-dashboard.yml file.
+ Setthis line from false to true.
+```
+opensearch_security.multitenancy.enabled: true
+```
+
+Add the following line.
+
+```
+opensearch_security.multitenancy.tenants.preferred: ["Global", "Private"]
+```
+
