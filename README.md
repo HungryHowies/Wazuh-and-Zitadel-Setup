@@ -109,8 +109,8 @@ vi /etc/wazuh-indexer/opensearch.yml
 
 ### Create certificates 
 
-This section will create a directory from the TAR file created in the above steps and  move them into Wazuh-indexer cert directory.
-Certs directory should have been made when running the install script. If not it will need to be made.
+This section will create a directory and use the certificates from the TAR file created in the above steps. Then move these certificates into Wazuh-indexer cert directory.
+NOTE: Certs directory should have been made when running the install script. If not it will need to be made.
 
 ```
 mkdir /etc/wazuh-indexer/certs
