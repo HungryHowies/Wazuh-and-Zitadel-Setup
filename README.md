@@ -46,7 +46,7 @@ curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
 curl -sO https://packages.wazuh.com/4.7/config.yml
 ```
 
-Edit ./config.yml and replace the node names and IP values. In this example I replaced the with local ip address.
+Edit ./config.yml and replace the node names and IP values. In this example I replaced it with local ip address of my Wazuh Instance.
 
 ```
 nodes:
