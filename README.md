@@ -137,7 +137,7 @@ chmod 400 /etc/wazuh-indexer/certs/*
 ```
 chown -R wazuh-indexer:wazuh-indexer /etc/wazuh-indexer/certs
 ```
-Adjust Wazuh-indexer configuration file. The default certificates names need to be renamed to match the ones inthe certs directory.
+Adjust Wazuh-indexer configuration file. The default certificates names need to be renamed to match the ones in the certs directory.
 
 Example:
 
