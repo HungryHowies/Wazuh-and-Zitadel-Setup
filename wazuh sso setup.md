@@ -44,7 +44,7 @@ saml_auth_domain:
 ```
 ### Configure section "saml_auth_domain"
 
-Get the exchange_key needed for OpenSearch, you need to create a service_user in Zitadel.
+Get the exchange_key needed for Wazuh , you need to create a service_user in Zitadel.
 
 Login to Zitadel Dashboard then navigate to Organization --> Users.
 
@@ -83,6 +83,12 @@ https://zitadel-self-hosting.com/saml/v2/metadata
 ```
 
 Add the following SAML settings in the config.yml file under *authc: saml_auth_domain*
+```
+subject_key: Email
+challenge: true
+metadata_url: https://zitadel.self-hosting.com/saml/v2/metadata
+entity_id: https://zitadel.self-hosting/saml/v2/metadata
+```
 
 The completed saml configuration is shown below.
 
@@ -144,7 +150,7 @@ vi /etc/wazuh-dashboard/opensearch_dashboards.yml
 opensearch_security.ui.saml.login.buttonname: Zitadel
 ```
 
-The SAML-specific configuration is done with the Security plugin,  activate SAML in your opensearch_dashboards.yml file by adding the following:
+The SAML-specific configuration is done with the Security plugin,  activate SAML in your wazuh_dashboards.yml file by adding the following:
 
 
 ```
@@ -201,7 +207,7 @@ systemctl restart wazuh-dashboard
 
 Navigate to Organization --> Projects.
 
-Create a new Project called Opensearch, click continue.
+Create a new Project called Wazuh, click continue.
 
 Under **Application** click "New" and select SAML, then name it Wazuh, Save.
 
@@ -249,13 +255,13 @@ Click Continue, then create.
 
 Give the service_user a role called "Project Owner Viewer Global".
 
-Add the new  "Service_User"  in the Authorizations section for the OpenSearch Project. 
+Add the new  "Service_User"  in the Authorizations section for the Wazuh Project. 
 
 ![image](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/assets/22652276/c5526860-ceab-43b3-ad78-bcc5b64b2cd4)
 
 
 
-### Opensearch Add User to Role
+### Wazuh Add User to Role
 
 Adding user from Zitadel Project.
 
