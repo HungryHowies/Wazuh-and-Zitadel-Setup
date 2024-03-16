@@ -1,5 +1,6 @@
 # Wazuh-and-Zitadel-Setup
-This documentation will show the basic Installation, configuration and connection for installing  Wazuh components, certificates and connection to Zitadel.
+This documentation will show the basic Installation, configuration and connection for installing  Wazuh components, certificates and connection to Zitadel. The documentation is broken up into two parts. The first part is Wazuh-and-Zitadel-Setu. The second part is called [wazuh sso setup.md](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/blob/ecde03d4c9616656a0c7d2b41713221af440929a/wazuh%20sso%20setup.md)  for the SAL/SSO configuration. 
+
 
 
 ## Prerequisite:
