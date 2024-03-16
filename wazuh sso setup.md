@@ -300,7 +300,7 @@ WEB UI should look like this.
  
 Found the solution   [Here](https://forum.opensearch.org/t/saml-issue-on-logout/5617/16?u=gsmitt)
 
-What I did was edit the following file. Line (326,15)
+What I did was edit the following file. Line (326,15). If its not there execute a searchin the file for **redirectUrl**
 
 ```
 vi /usr/share/wazuh-dashboard/plugins/securityDashboards/server/auth/types/saml/routes.js
