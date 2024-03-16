@@ -232,9 +232,7 @@ https://wazuh.domain.com/_opendistro/_security/saml/acs
 
 Results:
 
-NOTE: I did add a section for LOGOUT as shown below.
-
-It critial that the setting entityID and the entity_ID: in Wazuh config.yml file match exactly.
+NOTE: I did add a section for LOGOUT as shown below. It is critial that the setting entityID and the entity_ID: in Wazuh config.yml file match exactly.
 
 ```
 <?xml version="1.0"?>
