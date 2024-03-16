@@ -251,7 +251,8 @@ Give the service_user a role called "Project Owner Viewer Global".
 
 Add the new  "Service_User"  in the Authorizations section for the OpenSearch Project. 
 
-![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/5de876d7-bbe9-417c-a9b5-1772e09a3bdf)
+![image](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/assets/22652276/c5526860-ceab-43b3-ad78-bcc5b64b2cd4)
+
 
 
 ### Opensearch Add User to Role
