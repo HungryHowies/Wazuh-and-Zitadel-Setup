@@ -55,7 +55,7 @@ Under the Users section click "Service Users"
 
  When the Service User is completed, on the left pane click "Personal Access Tokens" and click "New".
  
-![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/e1ee0971-ba45-41c3-a8ac-a5844e89722e)
+![image](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/assets/22652276/eb5929f3-0152-4f22-b046-b791886dfa0d)
 
 
 Copy the token from Zitadel service_user.
