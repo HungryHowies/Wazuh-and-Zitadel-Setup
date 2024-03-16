@@ -157,6 +157,12 @@ Add the Security Type. In this section Im using two type Basic and SAML.
 opensearch_security.auth.type: ["basicauth","saml"]
 
 ```
+Multiple Authentication Mode is disabled. To enable this feature add this setting to wazuh-dashboard configuration file.
+
+```
+opensearch_security.auth.multiple_auth_enabled: true
+```
+
 Add the Wazuh Dashboards endpoint for validating the SAML assertions to your allow list.
 
 ```
@@ -208,7 +214,7 @@ Configure entity ID:
 This should match the **config.yml** file on opensearch.
 
 ```
-https://wazuh.domain.com:5601
+https://wazuh.domain.com
 ```
 
 Configure ACS endpoint URL.
