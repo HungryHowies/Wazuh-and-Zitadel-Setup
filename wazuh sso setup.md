@@ -218,7 +218,7 @@ Under SAML CONFIGURATION, Select Option #3.
 
 Configure entity ID:
 
-This should match the **config.yml** file on opensearch.
+This should match the **config.yml** file on Wazuh Instance.
 
 ```
 https://wazuh.domain.com
