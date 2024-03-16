@@ -33,6 +33,10 @@ To install all components needed download and run Wazuh custom script.
 curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh && sudo bash ./wazuh-install.sh -a
 ```
 All services at this time should be running and enabled.
+To get all default passwords execute this command. 
+```
+sudo tar -O -xvf wazuh-install-files.tar wazuh-install-files/wazuh-passwords.txt
+```
 Once completed and no issues then  all three services need to be stopped before continuing.
 
 ```
