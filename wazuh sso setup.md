@@ -262,7 +262,8 @@ Login to wazuh with Default Admin credentials.
 
 Navigate to Security --> Roles.
 
-![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/3ca2c47f-8f76-4861-b5e8-2f0c0035a4cb)
+![image](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/assets/22652276/a3aefffd-0f38-4ddc-bc5e-c6ada400e3dd)
+
 
  Add the user from Zitadel to a default Role or custom Role in wazuh. 
  
