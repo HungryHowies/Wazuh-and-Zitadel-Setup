@@ -257,7 +257,7 @@ systemctl enable wazuh-dashboard
 ```
 systemctl start wazuh-dashboard
 ```
-Login with FQDN ```https://wazuh.domain.com```
+Login with FQDN ```https://wazuh.domain.com``` OR IP Adress '''https://192.168.1.100'''
 
 You will noticed there on a Global tenent to adjust this add the following lines to wazuh-dashboard.yml file.
  Setthis line from false to true.
