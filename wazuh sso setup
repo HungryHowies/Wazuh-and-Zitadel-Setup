@@ -1,8 +1,8 @@
-# Zitadel-with-Opensearch-SAML-SSO
+# Wazuh SSO setup
 
 ## Overview
 
- The following documentation explains the configurations needed for OpenSearch Single sign-on (SSO) and the connection to Zitadel instance. OpenSearch node must be in Production mode, meaning you have created the certificate for "node/s, admin and CA" and ensure HTTPS is working correct. Take note this is a basic configuration setup to start SSO with OpenSearch using Zitadel.
+ The following documentation explains the configurations needed for Wazuh Single sign-on (SSO) and the connection to Zitadel instance. Wazuh node must be in Production mode, meaning you have created the certificate for "node/s, admin and CA" and ensure HTTPS is working correct. Take note this is a basic configuration setup to start SSO with wazuh using Zitadel.
 
 ## Prerequisite:
 * Ubuntu-22.0.4
