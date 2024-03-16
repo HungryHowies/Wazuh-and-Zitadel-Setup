@@ -170,13 +170,13 @@ This will apply the configuration from config.yml file.
 Change directory.
 
 ```
-cd /usr/share/opensearch/plugins/opensearch-security/tools/
+cd /usr/share/wazuh-indexer/bin/
 ```
 
 If the configuration files are completed, execute the security script. The command below will applying the new configurations made from the file config.yml.
 
 ```
-./securityadmin.sh 
+./indexer-security-init.sh
 ```
 
 Restart Wazuh-indexer
