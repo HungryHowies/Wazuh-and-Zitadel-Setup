@@ -83,6 +83,7 @@ https://zitadel-self-hosting.com/saml/v2/metadata
 ```
 
 Add the following SAML settings in the config.yml file under *authc: saml_auth_domain*
+
 ```
 subject_key: Email
 challenge: true
