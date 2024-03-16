@@ -15,7 +15,7 @@ NOTE: The Security plugin can read IdP metadata either from a URL or a file. In 
 ### Edit config.conf file.
 
 ```
-vi /etc/opensearch/opensearch-security/config.yml
+vi /etc/wazuh-indexer/opensearch-security/config.yml
 ```
 Copy and paste this blank configuration under the *authc* section. In this documentation I placed it under basic_internal_auth_domain:.
 
