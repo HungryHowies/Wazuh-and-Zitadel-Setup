@@ -205,7 +205,7 @@ Create a new Project called Opensearch, click continue.
 
 Under **Application** click "New" and select SAML, then name it Wazuh, Save.
 
-![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/fafdfc65-7f06-4220-b3d3-085a512990a8)
+![image](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/assets/22652276/e1378080-1fc9-4a44-9904-49b39dd82947)
 
 Under SAML CONFIGURATION, Select Option #3. 
 
