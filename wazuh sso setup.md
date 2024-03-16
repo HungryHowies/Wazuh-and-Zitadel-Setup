@@ -277,7 +277,8 @@ Navigate to Security --> Roles.
 
 WEB UI should look like this. 
 
- ![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/f259c1a6-c060-439f-a7a3-4f2fa1b74ce8)
+ ![image](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/assets/22652276/71f13c80-190c-4f6e-9b12-5a475c11d70f)
+
 
  You can either use a internal user (admin) to login or SSO button that would login a user from Zitadel.
 
