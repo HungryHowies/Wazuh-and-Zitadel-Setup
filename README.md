@@ -1,272 +1,345 @@
-# Wazuh-and-Zitadel-Setup
-This documentation will show the basic Installation, configuration and connection for installing  Wazuh components, certificates and connection to Zitadel.
+# Zitadel-with-Opensearch-SAML-SSO
 
+## Overview
+
+ The following documentation explains the configurations needed for OpenSearch Single sign-on (SSO) and the connection to Zitadel instance. OpenSearch node must be in Production mode, meaning you have created the certificate for "node/s, admin and CA" and ensure HTTPS is working correct. Take note this is a basic configuration setup to start SSO with OpenSearch using Zitadel.
 
 ## Prerequisite:
 * Ubuntu-22.0.4
 * Updates/Upgrades Completed
 * Network Configured (Static address and DNS)
 * Date/Time is set
-* Zitadel-v2.47.0
+* Opensearch-2.11.1
+* Zitadel-v2.44.2 +
+* JAVA_HOME is set
+
+To use SAML for authentication, configurations are needed in the **authc** section of this file  ```vi /etc/opensearch/opensearch-security/config.yml```. Setup authentication_backend to noop. Place all SAML-specific configuration options in config.yml file, under the section *saml_auth_domain:*. Ensure the order number is correct. In the example below the saml_auth_domain ORDER is set to 1 and basic_internal_auth_domain is set to "0". The  basic_internal_auth_domain challenge is set from true to false.
 
 
-## Wazuh installation
+NOTE: The Security plugin can read IdP metadata either from a URL or a file. In this example Im using URL.
 
-I found it easier to run Wazuh install script and then modify configuration files and certs later.
-
-Create custom Diretory.
-
-```
-mkdir /tmp/wazuh
-```
-
-Change directory.
+### Edit config.conf file.
 
 ```
-cd /tmp/wazuh
+vi /etc/opensearch/opensearch-security/config.yml
 ```
+Copy and paste this blank configuration under the *authc* section. In this documentation I placed it under basic_internal_auth_domain:.
+
+When completed it should look like this, ensure all indents are correct and I have shown http_enabled: is set to true. 
+
+```
+saml_auth_domain:
+        http_enabled: true
+        transport_enabled: false
+        order: 1
+        http_authenticator:
+          type: saml
+          challenge: false
+          config:
+            idp:
+              metadata_url: 
+              entity_id: 
+            sp:
+              entity_id: 
+            kibana_url: 
+            subject_key: 
+            roles_key: Role
+            exchange_key:             
+        authentication_backend:
+          type: noop
+```
+### Configure section "saml_auth_domain"
+
+Get the exchange_key needed for OpenSearch, you need to create a service_user in Zitadel.
+
+Login to Zitadel Dashboard then navigate to Organization --> Users.
+
+Under the Users section click "Service Users"
+
+![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/a37115d0-784c-429d-a0ea-3b522fc412a2)
+
+
+ When the Service User is completed, on the left pane click "Personal Access Tokens" and click "New".
  
-To install all components needed download and run Wazuh custom script.
+![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/e1ee0971-ba45-41c3-a8ac-a5844e89722e)
 
-``` 
-curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh && sudo bash ./wazuh-install.sh -a
-```
-All servcie at this time should be running and enabled.
-Once completed and no issues then  all three services need to be stopped before continuing.
 
-```
-systemctl stop wazuh-indexer wazuh-dashboards wazuh-manager
-```
-Download script and configuration file.
-```
-curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
-```
-```
-curl -sO https://packages.wazuh.com/4.7/config.yml
-```
+Copy the token from Zitadel service_user.
 
-Edit ./config.yml and replace the node names and IP values. In this example I replaced the with local ip address.
+![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/afaed1f4-f08e-4357-b695-d8b37e3603ed)
+
+Paste service_user token from Zitadel to the exchange_key section in the config.yml file.
 
 ```
-nodes:
-  # Wazuh indexer nodes
-  indexer:
-    - name: node-1
-      ip: "192.168.1.100"
-    #- name: node-2
-    #  ip: "<indexer-node-ip>"
-    #- name: node-3
-    #  ip: "<indexer-node-ip>"
-
-  # Wazuh server nodes
-  # If there is more than one Wazuh server
-  # node, each one must have a node_type
-  server:
-    - name: server-1
-      ip: "192.168.1.100"
-    #  node_type: master
-    #- name: wazuh-2
-    #  ip: "<wazuh-manager-ip>"
-    #  node_type: worker
-    #- name: wazuh-3
-    #  ip: "<wazuh-manager-ip>"
-    #  node_type: worker
-
-  # Wazuh dashboard nodes
-  dashboard:
-    - name: dashboard
-      ip: "192.168.1.100"
-~
+vi /etc/opensearch/opensearch-security/config.yml
 ```
-Run ./wazuh-certs-tool.sh to create the certificates
-```
-bash ./wazuh-certs-tool.sh -A
-```
-```
-tar -cvf ./wazuh-certificates.tar -C ./wazuh-certificates/ .
-```
-```
-rm -rf ./wazuh-certificates
-```
-Ensure dependencies are installed.
+Results:
 
 ```
-apt-get install debconf adduser procps
-```
-```
-apt-get install gnupg apt-transport-https
+exchange_key: AwqgAwIBAgICAY4wDQYJKoZIhvcNANjA2NT1UEChC0SOMETHING
 ```
 
-Edit opensearch.yml
+
+### Zitadels metadata URL
+
+For the *metadata_url* and *entity_id* section, I used Zitadel metadata URL.
 
 ```
-vi /etc/wazuh-indexer/opensearch.yml
+https://zitadel-self-hosting.com/saml/v2/metadata
 ```
 
-* network.host: Sets the address of this node for both HTTP and transport traffic. 
-* node.name: Name of the Wazuh indexer node as defined in the config.yml
-* cluster.initial_master_nodes: List of the names of the master-eligible nodes. 
+Add the following SAML settings in the config.yml file under *authc: saml_auth_domain*
 
-### Create certificates 
-
-This section will create a directory for certificates and use the certificates from the TAR file created in the above steps. Then move these certificates into Wazuh-indexer cert directory.
-
-NOTE: Certs directory should have been made when running the install script. If not it will need to be made.
+The completed saml configuration is shown below.
 
 ```
-mkdir /etc/wazuh-indexer/certs
-```
-```
-tar -xf ./wazuh-certificates.tar -C /etc/wazuh-indexer/certs/ ./$NODE_NAME.pem ./$NODE_NAME-key.pem ./admin.pem ./admin-key.pem ./root-ca.pem
-```
-```
-mv -n /etc/wazuh-indexer/certs/$NODE_NAME.pem /etc/wazuh-indexer/certs/indexer.pem
-```
-```
-mv -n /etc/wazuh-indexer/certs/$NODE_NAME-key.pem /etc/wazuh-indexer/certs/indexer-key.pem
-```
-Set permissions.
+  authc:
+      saml_auth_domain:
+       http_enabled: true
+       transport_enabled: true
+       order: 1
+       http_authenticator:
+        type: saml
+        challenge: true
+        config:
+         idp:
+          metadata_url: https://zitadel.self-hosting.com/saml/v2/metadata
+          entity_id: https://zitadel.self-hosting/saml/v2/metadata
+         sp:
+          entity_id: https://opensearch.domain.com:5601
+         kibana_url: https://opensearch.domain.com:5601
+         subject_key: Email
+         roles_key: Role
+         exchange_key: AwqgAwIBAgICAY4wDQYJKoZIhvcNANjA2NT1UEChC0SOMETHING
+       authentication_backend:
+          type: noop
+  ```
 
-```
-chmod 500 /etc/wazuh-indexer/certs
-```
-```
-chmod 400 /etc/wazuh-indexer/certs/*
-```
-```
-chown -R wazuh-indexer:wazuh-indexer /etc/wazuh-indexer/certs
-```
-Adjust Wazuh-indexer configuration file. The default certificates names need to be renamed to match the ones inthe certs directory.
+### basic_internal_auth_domain Section
+
+Change the challenge flag in basic_internal_auth_domain section from true to false.
 
 Example:
 
 ```
-plugins.security.ssl.http.pemcert_filepath: /etc/wazuh-indexer/certs/indexer.pem
-plugins.security.ssl.http.pemkey_filepath: /etc/wazuh-indexer/certs/indexer-key.pem
-plugins.security.ssl.http.pemtrustedcas_filepath: /etc/wazuh-indexer/certs/root-ca.pem
-plugins.security.ssl.transport.pemcert_filepath: /etc/wazuh-indexer/certs/indexer.pem
-plugins.security.ssl.transport.pemkey_filepath: /etc/wazuh-indexer/certs/indexer-key.pem
-plugins.security.ssl.transport.pemtrustedcas_filepath: /etc/wazuh-indexer/certs/root-ca.pem
-```
-Wazuh-indexer Services.
-
-```
-systemctl daemon-reload
-```
-```
-systemctl enable wazuh-indexer
-```
-```
-systemctl start wazuh-indexer
+basic_internal_auth_domain:
+        description: "Authenticate via HTTP Basic against internal users database"
+        http_enabled: true
+        transport_enabled: true
+        order: 0
+        http_authenticator:
+          type: basic
+          challenge: false
+        authentication_backend:
+          type: intern
 ```
 
-Check status.
+  
+###  OpenSearch Dashboards configuration
+
+
+Edit Opensearch-Dashboard yaml file.
 
 ```
-systemctl status wazuh-indexer
+vi /etc/opensearch-dashboards/opensearch_dashboards.yml
 ```
 
-Run the indexer-security-init.sh script to load the new certificates information and start the single-node.
-
-Change directory.
+(Option) Change the name on SSO button.
 
 ```
-cd /usr/share/wazuh-indexer/bin
-```
-Execute script.
-
-```
-./indexer-security-init.sh
+opensearch_security.ui.saml.login.buttonname: Zitadel
 ```
 
-### Wazuh-dashboard
+The SAML-specific configuration is done with the  Security plugin,  activate SAML in your opensearch_dashboards.yml file by adding the following:
 
-Ensure all dependencies are installed.
 
 ```
-apt-get install debhelper tar curl libcap2-bin
+opensearch_security.auth.type: "saml"
 ```
 
-Edit the Wazuh-Dashboard file.
+Add the Security Type. In this section Im using two type Basic and SAML.
 
 ```
-vi /etc/wazuh-dashboard/opensearch_dashboards.yml
+opensearch_security.auth.type: ["basicauth","saml"]
 ```
-
-* server.host: This setting specifies the host of the Wazuh dashboard server. To allow remote users to connect, set the value to the IP address or DNS name of the Wazuh dashboard server
-* opensearch.hosts: The URLs of the Wazuh indexer instances to use for all your queries. 
-
-
-### Deploy Certificates for Wazuh-dashboard.
-This section will create a directory from the TAR file created in the above steps and move them into Wazuh-dashboards cert directory.
-Certs directory should have been made when running the install script earlier. If not it will need to be made.
+Add the OpenSearch Dashboards endpoint for validating the SAML assertions to your allow list.
 
 ```
-mkdir /etc/wazuh-dashboard/certs
+server.xsrf.allowlist: ["/_opendistro/_security/saml/acs", "/_opendistro/_security/saml/logout"]
 ```
+
+### Execute Security Script 
+
+This will apply the configuration from config.yml file.
 
 Change directory.
 
 ```
-cd /tmp/wazuh/
+cd /usr/share/opensearch/plugins/opensearch-security/tools/
 ```
 
-Deploy Certificates.
+If the configuration files are completed, execute the security script. The command below will applying the new configurations made from the file config.yml.
 
 ```
-tar -xf ./wazuh-certificates.tar -C /etc/wazuh-dashboard/certs/ ./$NODE_NAME.pem ./$NODE_NAME-key.pem ./root-ca.pem
-```
-```
-mv -n /etc/wazuh-dashboard/certs/$NODE_NAME.pem /etc/wazuh-dashboard/certs/dashboard.pem
-```
-```
-mv -n /etc/wazuh-dashboard/certs/$NODE_NAME-key.pem /etc/wazuh-dashboard/certs/dashboard-key.pem
+./securityadmin.sh -h opensearch.domai.com -f /etc/opensearch/opensearch-security/config.yml    -cacert /etc/opensearch/root-ca.pem -cert /etc/opensearch/admin.pem -key /etc/opensearch/admin-key.pem -icl -nhnv
 ```
 
-Set permissions.
+Restart Opensearch
 
 ```
-chmod 500 /etc/wazuh-dashboard/certs
-```
-```
-chmod 400 /etc/wazuh-dashboard/certs/*
-```
-```
-chown -R wazuh-dashboard:wazuh-dashboard /etc/wazuh-dashboard/certs
+systemctl restart opensearch
 ```
 
-Adjust Wazuh-dashboard configuration file. The default certificates need to be renamed.
-
-Example:
+Restart OpenSearch-Dashboards
 
 ```
-server.ssl.key: "/etc/wazuh-dashboard/certs/dashboard-key.pem"
-server.ssl.certificate: "/etc/wazuh-dashboard/certs/dashboard.pem"
-opensearch.ssl.certificateAuthorities: ["/etc/wazuh-dashboard/certs/root-ca.pem"]
+systemctl restart opensearch-dashboards
 ```
 
-Wazuh-Dashboard Services
+### Zitadel  Settings
+
+Navigate to Organization --> Projects.
+
+Create a new Project called Opensearch, click continue.
+
+Under **Application** click "New" and select SAML, then name it Opensearch, Save.
+
+![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/fafdfc65-7f06-4220-b3d3-085a512990a8)
+
+Under SAML CONFIGURATION, Select Option #3. 
+
+Configure entity ID:
+
+This should match the **config.yml** file on opensearch.
 
 ```
-systemctl daemon-reload
-```
-```
-systemctl enable wazuh-dashboard
-```
-```
-systemctl start wazuh-dashboard
-```
-Login with FQDN ```https://wazuh.domain.com```
-
-You will noticed there on a Global tenent to adjust this add the following lines to wazuh-dashboard.yml file.
- Setthis line from false to true.
-```
-opensearch_security.multitenancy.enabled: true
+https://opensearch.domain.com:5601
 ```
 
-Add the following line.
+Configure ACS endpoint URL.
 
 ```
-opensearch_security.multitenancy.tenants.preferred: ["Global", "Private"]
+https://opensearch.domain.com:5601/_opendistro/_security/saml/acs
 ```
+
+Results:
+
+NOTE: I did add a section for LOGOUT as shown below.
+
+```
+<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"                     
+                     entityID="https://opensearch.domain.com:5601">
+    <md:SPSSODescriptor AuthnRequestsSigned="false" WantAssertionsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                                Location="https://opensearch.domain.com:5601/_opendistro/_security/saml/logout" />
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+        <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                                     Location="https://opensearch.domain.com:5601/_opendistro/_security/saml/acs" index="0" />
+        
+    </md:SPSSODescriptor>
+</md:EntityDescriptor>
+```
+
+Click Continue, then create.
+
+
+### Service user to Zitadel Project
+
+Give the service_user a role called "Project Owner Viewer Global".
+
+Add the new  "Service_User"  in the Authorizations section for the OpenSearch Project. 
+
+![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/5de876d7-bbe9-417c-a9b5-1772e09a3bdf)
+
+
+### Opensearch Add User to Role
+
+Adding user from Zitadel Project.
+
+Login to Opensearch with Default Admin credentials. 
+
+Navigate to Security --> Roles.
+
+![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/3ca2c47f-8f76-4861-b5e8-2f0c0035a4cb)
+
+ Add the user from Zitadel to a default Role or custom Role in Opensearch. 
+ 
+ **Example:** I added some.user from Zitadel to **all_access**. 
+
+ Choose "all_access", then click the Mapped Users tab.
+
+ Button upper right, click "Manage mapping". Add the user "some.user".
+ 
+ 
+ ![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/e4451297-0316-4a67-bf58-47a750463041)
+
+WEB UI should look like this. 
+
+ ![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/f259c1a6-c060-439f-a7a3-4f2fa1b74ce8)
+
+ You can either use a internal user (admin) to login or SSO button that would login a user from Zitadel.
+
+
+ ### Opensearch Logging off with 404
+
+ When logging off,  I recieved a 404 error.
+
+***{"statusCode":404,"error":"Not Found","message":"Not Found"}***
+ 
+Found the solution   [Here](https://forum.opensearch.org/t/saml-issue-on-logout/5617/16?u=gsmitt)
+
+What I did was edit the following file. Line (326,15)
+
+```
+vi /usr/share/opensearch-dashboards/plugins/securityDashboards/server/auth/types/saml/routes.js
+```
+Commented out this line.
+
+```
+//  const redirectUrl = authInfo.sso_logout_url || this.coreSetup.http.basePath.serverBasePath || '/';
+```
+
+Added this line.
+
+```
+const redirectUrl = `${this.coreSetup.http.basePath.serverBasePath}/app/home`;
+```
+
+Results:
+
+![image](https://github.com/HungryHowies/Zitadel-with-Opensearch-SSO/assets/22652276/fc0f0851-5ac2-4010-988b-4560ce2c210d)
+ 
+
+ 
+
+  
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
