@@ -296,7 +296,7 @@ Found the solution   [Here](https://forum.opensearch.org/t/saml-issue-on-logout/
 What I did was edit the following file. Line (326,15)
 
 ```
-vi /usr/share/opensearch-dashboards/plugins/securityDashboards/server/auth/types/saml/routes.js
+vi /usr/share/wazuh-dashboard/plugins/securityDashboards/server/auth/types/saml/routes.js
 ```
 Commented out this line.
 
