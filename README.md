@@ -1,5 +1,5 @@
 # Wazuh-and-Zitadel-Setup
-This documentation will show the basic Installation, configuration and connection for installing  Wazuh components, certificates and connection to Zitadel. The documentation is broken up into two parts. The first part is Wazuh-and-Zitadel-Setup. The second part is called [wazuh sso setup.md](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/blob/ecde03d4c9616656a0c7d2b41713221af440929a/wazuh%20sso%20setup.md)  for the SAML/SSO configuration. 
+This documentation will show the basic Installation, configuration, and connection for installing  Wazuh components, certificates and connection to Zitadel. The documentation is broken up into two parts. The first part is Wazuh-and-Zitadel-Setup. The second part is called [wazuh sso setup.md](https://github.com/HungryHowies/Wazuh-and-Zitadel-Setup/blob/ecde03d4c9616656a0c7d2b41713221af440929a/wazuh%20sso%20setup.md)  for the SAML/SSO configuration. 
 
 
 
@@ -15,7 +15,7 @@ This documentation will show the basic Installation, configuration and connectio
 
 I found it easier to run Wazuh install script and then modify configuration files and certs later.
 
-Create custom Diretory.
+Create custom Directory.
 
 ```
 mkdir /tmp/wazuh
@@ -32,11 +32,11 @@ To install all components needed download and run Wazuh custom script.
 ``` 
 curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh && sudo bash ./wazuh-install.sh -a
 ```
-All servcie at this time should be running and enabled.
+All services at this time should be running and enabled.
 Once completed and no issues then  all three services need to be stopped before continuing.
 
 ```
-systemctl stop wazuh-indexer wazuh-dashboards wazuh-manager
+systemctl stop wazuh-indexer wazuh-dashboards wazuh-manager.
 ```
 Download script and configuration file.
 ```
@@ -46,7 +46,7 @@ curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
 curl -sO https://packages.wazuh.com/4.7/config.yml
 ```
 
-Edit ./config.yml and replace the node names and IP values. In this example I replaced it with local ip address of my Wazuh Instance.
+Edit ./config.yml and replace the node names and IP values. In this example I replaced it with the local Ip address of my Wazuh Instance.
 
 ```
 nodes:
@@ -79,7 +79,7 @@ nodes:
       ip: "192.168.1.100"
 ~
 ```
-Run ./wazuh-certs-tool.sh to create the certificates
+Run ./wazuh-certs-tool.sh to create the certificates.
 ```
 bash ./wazuh-certs-tool.sh -A
 ```
@@ -98,7 +98,7 @@ apt-get install debconf adduser procps
 apt-get install gnupg apt-transport-https
 ```
 
-Edit opensearch.yml
+Edit opensearch.yml.
 
 ```
 vi /etc/wazuh-indexer/opensearch.yml
@@ -112,11 +112,13 @@ vi /etc/wazuh-indexer/opensearch.yml
 
 This section will create a directory for certificates and use the certificates from the TAR file created in the above steps. Then move these certificates into Wazuh-indexer cert directory.
 
-NOTE: Certs directory should have been made when running the install script. If not it will need to be made.
+NOTE: Certs directory should have been made when running the install script. If not, it will need to be done.
 
 ```
 mkdir /etc/wazuh-indexer/certs
 ```
+
+Replace the $NODE_NAME  with the name configured in config.yml file.
 ```
 tar -xf ./wazuh-certificates.tar -C /etc/wazuh-indexer/certs/ ./$NODE_NAME.pem ./$NODE_NAME-key.pem ./admin.pem ./admin-key.pem ./root-ca.pem
 ```
@@ -137,7 +139,7 @@ chmod 400 /etc/wazuh-indexer/certs/*
 ```
 chown -R wazuh-indexer:wazuh-indexer /etc/wazuh-indexer/certs
 ```
-Adjust Wazuh-indexer configuration file. The default certificates names need to be renamed to match the ones in the certs directory.
+Adjust Wazuh-indexer configuration file. The default certificates names need to be renamed to match the ones in the cert’s directory.
 
 Example:
 
@@ -167,7 +169,7 @@ Check status.
 systemctl status wazuh-indexer
 ```
 
-Run the indexer-security-init.sh script to load the new certificates information and start the single-node.
+Run the indexer-security-init.sh script to load the new certificates information and start the single node.
 
 Change directory.
 
@@ -194,13 +196,13 @@ Edit the Wazuh-Dashboard file.
 vi /etc/wazuh-dashboard/opensearch_dashboards.yml
 ```
 
-* server.host: This setting specifies the host of the Wazuh dashboard server. To allow remote users to connect, set the value to the IP address or DNS name of the Wazuh dashboard server
+* server.host: This setting specifies the host of the Wazuh dashboard server. To allow remote users to connect, set the value to the IP address or DNS name of the Wazuh dashboard server.
 * opensearch.hosts: The URLs of the Wazuh indexer instances to use for all your queries. 
 
 
 ### Deploy Certificates for Wazuh-dashboard.
 This section will create a directory from the TAR file created in the above steps and move them into Wazuh-dashboards cert directory.
-Certs directory should have been made when running the install script earlier. If not it will need to be made.
+Certs directory should have been made when running the install script earlier. If not, it will need to be done.
 
 ```
 mkdir /etc/wazuh-dashboard/certs
@@ -213,7 +215,7 @@ cd /tmp/wazuh/
 ```
 
 Deploy Certificates.
-
+Replace the $NODE_NAME  with the name configured in config.yml file.
 ```
 tar -xf ./wazuh-certificates.tar -C /etc/wazuh-dashboard/certs/ ./$NODE_NAME.pem ./$NODE_NAME-key.pem ./root-ca.pem
 ```
@@ -259,7 +261,7 @@ systemctl start wazuh-dashboard
 ```
 Login with FQDN ```https://wazuh.domain.com``` OR IP Adress ```https://192.168.1.100```
 
-You will noticed the Global is the only tenent. To adjust this add the following lines to wazuh-dashboard.yml file.
+You will notice the Global tenant is the only tenant. To adjust this, add the following lines to wazuh-dashboard.yml file.
 Set this line from false to true.
 ```
 opensearch_security.multitenancy.enabled: true
