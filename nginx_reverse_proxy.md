@@ -1,11 +1,14 @@
 ## Nginx Reverse Proxy Setup
 
-If not in a cluster (single node) this should be a default configurtion for opnesearch/opensearch-dashboard configuration file.
+This documentation shows how to configure Nginx reverse proxy with Let's Encrypt which connects to Wazuh.
 
+If your setup is not in a cluster (single node). The default settings for opnesearch/opensearch-dashboard configuration file as shown below.
 
 ### Wazuh Indexer Configuration
 
 Wazuh Indexer should be set as shown below.
+
+Default:
 
 ```
 network.host: "127.0.0.1"
@@ -13,20 +16,24 @@ network.host: "127.0.0.1"
 
 ### Wazuh Dashboard Configuration
 
-Change the port to  something else besides 443. In this example it 4443
+Change the port to something else besides 443. In this example its 4443.
+
 ```
 server.port: 4443 
 ```
 
-Settings as shown below. 
+Completed settings as shown below. 
+
 ```
 server.host: 0.0.0.0
 opensearch.hosts: https://127.0.0.1:9200
 server.port: 4443
 ```
-Restart serives
+
+Restart wazuh services.
+
 ```
-systemctl restart wazuh-inder wazuh-dashboard
+systemctl restart wazuh-manager wazuh-dashboard 
 ```
 
 ###  Nginx
@@ -48,7 +55,7 @@ Configure the default site file as shown below.
 ```
 server {
     listen 80;
-    server_name grafana.domain.com;
+    server_name wazuh.domain.com;
 
     location / {
         proxy_pass http://127.0.0.1:4443/;
@@ -58,6 +65,19 @@ server {
     }
 }
 ```
+
+Check the default site settings.
+
+```
+nginx -t
+```
+
+Reload the configuration file.
+
+```
+systemctl reload nginx
+```
+
 Install Certbot for lets encrypt.
 
 ```
@@ -69,5 +89,19 @@ Run Certbot and fill in all the requirements needed.
 ```
 sudo certbot --nginx
 ```
+
+Once completed restart Nginx service.
+
+```
+systemctl restart nginx
+```
+
+Access the Wazuh-Dashboard URL.
+
+```
+https://wazuh.domain.com
+```
+
+
 
 
