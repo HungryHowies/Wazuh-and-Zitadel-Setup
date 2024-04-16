@@ -35,6 +35,22 @@ Restart wazuh services.
 ```
 systemctl restart wazuh-manager wazuh-dashboard 
 ```
+### Opensearch Security Configuration file
+
+Ensure the end point for the SAMl section is configured  correct. 
+
+For example, 
+
+```
+https://opensearch.domain.com:5601
+```
+
+Needs to be changed to...
+
+```
+https://opensearch.domain.com
+```
+Also adjust IDP endpoint to reflect the new post number. 
 
 ###  Nginx
 
