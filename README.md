@@ -191,11 +191,11 @@ Execute script.
 ```
 ./indexer-security-init.sh
 ```
+For the configuration to take affect restart the following services.
 ```
 systemctl restart wazuh-manager
 ```
 ```
-
 systemctl restart wazuh-indexer
 ```
 
