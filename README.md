@@ -191,8 +191,13 @@ Execute script.
 ```
 ./indexer-security-init.sh
 ```
+```
+systemctl restart wazuh-manager
+```
+```
 
-### Wazuh-dashboard
+systemctl restart wazuh-indexer
+```
 
 Ensure all dependencies are installed.
 
