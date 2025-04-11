@@ -38,7 +38,7 @@ To get all default passwords execute this command.
 ```
 sudo tar -O -xvf wazuh-install-files.tar wazuh-install-files/wazuh-passwords.txt
 ```
-NOTE: incase the need to change the has execute the following.
+NOTE: Execute this to change Admin passwd.
 
 ```
 bash wazuh-passwords-tool.sh -u admin
