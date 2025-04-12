@@ -11,9 +11,9 @@ This isnatll discribed below was installed with  Wazuh Script so it has all defu
 Example:
 ```
 network.host: "127.0.0.1,192.168.1.255"
-node.name: "node-1"
+node.name: "node02"
 cluster.initial_master_nodes:
-- "node-2"
+- "node02"
 cluster.name: "wazuh-cluster"
 ```
 
