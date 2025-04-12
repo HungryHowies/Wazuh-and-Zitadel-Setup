@@ -2,13 +2,18 @@
 
 The following documentation discribes the configuration need to  connect Grafana Data Source to Wazuh-Indexer for trending data.
 
-This isnatll discribed below was installed with  Wazuh Script so it has all defualt settings. Some configuration are needed to connect remotely to the Wazuh-Indexer.
+This insatll discribed below was installed with  Wazuh Script so it has all defualt settings. Some configuration are needed to connect remotely to the Wazuh-Indexer.
+Edit the following file.
 
-1. change the Cluster name.
+```
+vi /etc/wazuh-indexer/opensearch.yml
+```
+1. Change the Cluster name.
 2. Change the Node name.
-3. Add ip address to network host
+3. Add ip address to network host.
 
 Example:
+
 ```
 network.host: "127.0.0.1,192.168.1.255"
 node.name: "node02"
