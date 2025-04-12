@@ -48,3 +48,9 @@ Results
     <disabled>no</disabled>
   </cluster>
 ```
+
+Restart  Wazuh-manager service
+
+```
+systemctl restart wazuh-manager
+```
