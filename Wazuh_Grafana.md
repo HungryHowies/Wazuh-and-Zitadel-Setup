@@ -10,7 +10,7 @@ This isnatll discribed below was installed with  Wazuh Script so it has all defu
 
 Example:
 ```
-network.host: "127.0.0.1,192.168.0.207"
+network.host: "127.0.0.1,192.168.1.255"
 node.name: "node-1"
 cluster.initial_master_nodes:
 - "node-2"
