@@ -14,8 +14,14 @@ vi /etc/wazuh-indexer/opensearch.yml
 
 Example:
 
+NOTE: For production the network host configurations should be a static address.
+
 ```
-network.host: "127.0.0.1,192.168.1.255"
+network.host: "0.0.0.0"
+```
+
+
+```
 node.name: "node02"
 cluster.initial_master_nodes:
 - "node02"
@@ -23,20 +29,42 @@ cluster.name: "wazuh-cluster"
 ```
 
 ### Cluster running
+
+This section is import in many ways especially for the Node Name shown on Grafana dashboard.
+
 Check ossec file.
+
 ```
 cat /var/ossec/etc/ossec.conf | grep -A12 "<cluster>"
 ```
-Ensure you created a key.
- ```
+Ensure the key is created.
+
+```
 openssl rand -hex 16
 ```
 Paste that in ossec file under cluster between <key></key> 
 ```
 <key>3e465e7f1b6eaa52f22b93618ced96eb</key>
 ```
+Cluster nodes setting.
 
-Results
+```
+<node>192.168.1.100</node>
+```
+Enable the cluster.
+
+Default:
+
+```
+<disabled>yes</disabled>
+```
+Configured as following.
+
+```
+<disabled>no</disabled>
+```
+
+Results:
 
 ```
  <cluster>
