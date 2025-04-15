@@ -77,7 +77,7 @@ Results:
     <port>1516</port>
     <bind_addr>0.0.0.0</bind_addr>
     <nodes>
-        <node>node-ipaddress</node>
+        <node>192.168.1.100</node>
     </nodes>
     <hidden>no</hidden>
     <disabled>no</disabled>
