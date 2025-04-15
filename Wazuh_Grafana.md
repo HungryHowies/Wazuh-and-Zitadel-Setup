@@ -107,7 +107,8 @@ Server ( Default)
 ```
 Auth
 
-Enable Basic auth tic box.
+Enable Basic auth tic box. For exampel I used the default admin and password.
+
 Enable Skip TLS Verify tic box
 
 OpenSearch Details
