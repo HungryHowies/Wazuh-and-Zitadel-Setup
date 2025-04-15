@@ -1,20 +1,20 @@
 ## Grafana Connecting to Wazuh
 
-The following documentation discribes the configuration need to  connect Grafana Data Source to Wazuh-Indexer for trending data.
+The following documentation discribes the configuration needed to connect Grafana Data Source to Wazuh-Indexer.
 
-This insatll discribed below was installed with  Wazuh Script so it has all defualt settings. Some configuration are needed to connect remotely to the Wazuh-Indexer.
+This install will discribe howto install with the Wazuh Script. Some configuration are needed to connect remotely to the Wazuh-Indexer.
 Edit the following file.
 
 ```
 vi /etc/wazuh-indexer/opensearch.yml
 ```
-1. Change the Cluster name.
-2. Change the Node name.
-3. Add ip address to network host.
+1. Adjust the Cluster name.
+2. Adjust the Node name.
+3. Adjust the network host address.
 
 Example:
 
-NOTE: For production the network host configurations should be a static address.
+NOTE: For production the network host configurations should be a static address/fqdn.
 
 ```
 network.host: "0.0.0.0"
@@ -30,7 +30,7 @@ cluster.name: "wazuh-cluster"
 
 ### Cluster running
 
-This section is import in many ways especially for the Node Name shown on Grafana dashboard.
+The Node Name shown on Grafana dashboard.
 
 Check ossec file.
 
@@ -42,7 +42,8 @@ Ensure the key is created.
 ```
 openssl rand -hex 16
 ```
-Paste that in ossec file under cluster between <key></key> 
+Paste hex in the ossec file. This will be under cluster between  <key> </key> .
+
 ```
 <key>3e465e7f1b6eaa52f22b93618ced96eb</key>
 ```
@@ -51,6 +52,7 @@ Cluster nodes setting.
 ```
 <node>192.168.1.100</node>
 ```
+
 Enable the cluster.
 
 Default:
