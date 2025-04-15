@@ -89,3 +89,32 @@ Restart  Wazuh-manager service
 ```
 systemctl restart wazuh-manager
 ```
+
+
+### Grafana Data Sources Configuration
+
+In this example im using OpenSearch Plugin.
+
+Settings
+HTTP URL  section
+```
+https://opensearch.com:9200
+```
+Access 
+
+```
+Server ( Default)
+```
+Auth
+
+Enable Basic auth tic box.
+Enable Skip TLS Verify tic box
+
+OpenSearch Details
+Index name, set this for the indices connection.
+Logs
+Message field name cluster.node, this will show on the visulization section.
+
+
+
+ 
