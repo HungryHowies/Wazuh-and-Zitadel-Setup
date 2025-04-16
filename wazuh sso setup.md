@@ -8,7 +8,9 @@ Take note this is a basic configuration setup to start SSO with wazuh using Zita
 
 To use SAML for authentication, configurations are needed in the **authc** section of this file 
 
-```vi /etc/wazuh-indexer/opensearch-security/config.yml```. 
+```
+vi /etc/wazuh-indexer/opensearch-security/config.yml
+```
 
 Setup authentication_backend to noop. Place all SAML-specific configuration options in config.yml file, under the section *saml_auth_domain:*. Ensure the order number is correct. In the example below the saml_auth_domain ORDER is set to 1 and basic_internal_auth_domain is set to "0". The  basic_internal_auth_domain challenge is set from true to false.
 
