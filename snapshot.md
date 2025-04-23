@@ -33,8 +33,17 @@ PUT /_snapshot/my-fs-repository
 }
 ```
 
-Create policy
+### Create policy
 
+Make a policy name.
+Choose the indices you wish to backup.
+Snapshot schedule will be on a daily frequency.
+Create a Snapshot retention period.
+Notification configurations.
+
+
+
+ 
 
 
 
